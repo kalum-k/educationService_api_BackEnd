@@ -35,7 +35,7 @@ class Database extends Config
 		'hostname' => 'localhost',
 		'username' => 'root',
 		'password' => '',
-		'database' => 'education_service',
+		'database' => 'educationservice',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,
