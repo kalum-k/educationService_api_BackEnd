@@ -68,14 +68,16 @@ $routes->post('/createEducation','Education::createEducation');
 $routes->put('/updateEducation/(:num)', 'Education::updateEducation/$1');
 $routes->delete('/deleteEducation/(:num)','Education::deletedEducation/$1');
 $routes->get('/getEducation','Education::getEducation');
-$routes->get('/Education/(:num)','Education::getEducationById/$1');
+$routes->get('/Education/(:num)','Education::getEducatioById/$1');
 
 //EducationDetail
 $routes->get('/eduDetail', 'eduDetail::index');
 $routes->post('/createEduDetail','eduDetail::createEduDetail');
 $routes->put('/updateEduDetail/(:num)', 'Education::updateEduDetail/$1');
 $routes->get('/getEduDetail','eduDetail::getEduDetail');
+$routes->get('/eduDetail/(:num)','eduDetail::getEduDetailById/$1');
 
+//Condition
 $routes->post('/createEduCondition','EduCondition::createEduCondition');
 $routes->put('/updateEduCondition/(:num)', 'EduCondition::updateEduCondition/$1');
 

@@ -1,5 +1,7 @@
-<?php 
+<?php
+
 namespace App\Controllers;
+
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\EducationModel;
@@ -12,85 +14,98 @@ class Education extends ResourceController
     public function index()
     {
         $model = new EducationModel();
-        $educationdata['education'] = $model->orderBy('id_education','DESC')->findAll();
+        $educationdata['education'] = $model->orderBy('id_education', 'DESC')->findAll();
         return $this->respond($educationdata);
     }
-    public function getEducationById($id = null){
+    public function getEducation()
+    {
         $model = new EducationModel();
-        $educationdata = $model->join('round', 'round.id_round = education.id_round ')
-        ->join('university', 'university.id_university = education.id_university')
-        ->join('schedule','scedule.id_schedule','education.id_schedule')
-        ->select('round.name_round')
-        ->select('university.name_uni')
-        ->select('schedule.detail_schedule')
-        ->select('education.*')
-        ->orderBy('education.id_ecation')->first();
+        $educationdata = $model->join('round', 'round.id_round = education.id_round')
+            ->join('university', 'university.id_university = education.id_university')
+            ->join('schedule', 'schedule.id_schedule = education.id_schedule')
+            ->select('round.name_round')
+            ->select('university.name_uni')
+            ->select('schedule.detail_schedule')
+            ->select('education.*')
+            ->orderBy('education.id_education')->first();
         return $this->respond($educationdata);
+    }
+    public function getEducatioById($id = null)
+    {
+        $model = new EducationModel();
+        $educationdata = $model->where('id_education',$id)->first();
+        if($educationdata){
+            return $this->respond($educationdata);
+        }else{
+            return $this->failNotFound('Not found');
+        }
     }
 
-    public function createEducation(){
- 
+    public function createEducation()
+    {
+
         $model = new EducationModel();
-        $educationdata =[
-           "year_edu"=> $this->request->getVar('year_edu'),
-           "id_round"=> $this->request->getVar('id_round'),
-           "id_university"=> $this->request->getVar('id_university'),
-           "tcas"=> $this->request->getVar('tcas'),
-           "open_date"=> $this->request->getVar('open_date'),
-           "close_date"=> $this->request->getVar('close_date'),
-           "list_day"=> $this->request->getVar('list_day'),
-           "general"=> $this->request->getVar('general'),
-           "doculment_edu"=> $this->request->getVar('doculment_edu'),
-           "note_edu"=> $this->request->getVar('note_edu'),
-           "file_doculment"=> $this->request->getVar('file_doculment'),
-           "url_doculment"=> $this->request->getVar('url_doculment'),
-           "id_schedule"=> $this->request->getVar('id_schedule')
+        $educationdata = [
+            "year_edu" => $this->request->getVar('year_edu'),
+            "id_round" => $this->request->getVar('id_round'),
+            "id_university" => $this->request->getVar('id_university'),
+            "tcas" => $this->request->getVar('tcas'),
+            "open_date" => $this->request->getVar('open_date'),
+            "close_date" => $this->request->getVar('close_date'),
+            "list_day" => $this->request->getVar('list_day'),
+            "general" => $this->request->getVar('general'),
+            "doculment_edu" => $this->request->getVar('doculment_edu'),
+            "note_edu" => $this->request->getVar('note_edu'),
+            "file_doculment" => $this->request->getVar('file_doculment'),
+            "url_doculment" => $this->request->getVar('url_doculment'),
+            "id_schedule" => $this->request->getVar('id_schedule')
         ];
         $model->insert($educationdata);
-        $response=[
-            'satatus'=>201,
-            'error'=>null,
-            'meessage'=>[
+        $response = [
+            'satatus' => 201,
+            'error' => null,
+            'meessage' => [
                 'success' => 'create successfully'
             ],
             'data' => $educationdata
         ];
-            return $this->respond($response);
-    } 
+        return $this->respond($response);
+    }
 
     public function updateEducation($id = null)
     {
         $model = new EducationModel();
-        $educationdata =[
-            "year_edu"=> $this->request->getVar('year_edu'),
-           "id_round"=> $this->request->getVar('id_round'),
-           "id_university"=> $this->request->getVar('id_university'),
-           "tcas"=> $this->request->getVar('tcas'),
-           "open_date"=> $this->request->getVar('open_date'),
-           "close_date"=> $this->request->getVar('close_date'),
-           "list_day"=> $this->request->getVar('list_day'),
-           "general"=> $this->request->getVar('general'),
-           "doculment_edu"=> $this->request->getVar('doculment_edu'),
-           "note_edu"=> $this->request->getVar('note_edu'),
-           "file_doculment"=> $this->request->getVar('file_doculment'),
-           "url_doculment"=> $this->request->getVar('url_doculment'),
-           "id_schedule"=> $this->request->getVar('id_schedule')
+        $educationdata = [
+            "year_edu" => $this->request->getVar('year_edu'),
+            "id_round" => $this->request->getVar('id_round'),
+            "id_university" => $this->request->getVar('id_university'),
+            "tcas" => $this->request->getVar('tcas'),
+            "open_date" => $this->request->getVar('open_date'),
+            "close_date" => $this->request->getVar('close_date'),
+            "list_day" => $this->request->getVar('list_day'),
+            "general" => $this->request->getVar('general'),
+            "doculment_edu" => $this->request->getVar('doculment_edu'),
+            "note_edu" => $this->request->getVar('note_edu'),
+            "file_doculment" => $this->request->getVar('file_doculment'),
+            "url_doculment" => $this->request->getVar('url_doculment'),
+            "id_schedule" => $this->request->getVar('id_schedule')
         ];
         $model->update($id, $educationdata);
-        $response=[
-            'satatus'=>201,
-            'error'=>null,
-            'meessage'=>[
+        $response = [
+            'satatus' => 201,
+            'error' => null,
+            'meessage' => [
                 'success' => 'Educcation create successfully'
             ]
         ];
-            return $this->respond($response);
-    } 
-  
-    public function deletedEducation($id = null){
+        return $this->respond($response);
+    }
+
+    public function deletedEducation($id = null)
+    {
         $model = new EducationModel();
         $educationdata = $model->delete($id);
-        if($educationdata){
+        if ($educationdata) {
             $model->delete($id);
             $response = [
                 'satatus' => 200,
@@ -100,8 +115,8 @@ class Education extends ResourceController
                 ]
             ];
             return $this->respond($response);
-        }else{
+        } else {
             return $this->failNotFound('No');
         }
-    } 
+    }
 }

@@ -21,15 +21,24 @@ class EduDetail extends ResourceController
     public function getEduDetail()
     {
         $model = new EduDetailModel();
-        $educationDetaildata = $model->join('course', 'course.id_course = education_detail.id_course ')
-        ->join('faculty', 'faculty.id_faculty = education_detail.id_faculty')
-        ->join('edu_condition', 'edu_condition.id_condition = education_detail.id_condition')
+        $educationDetaildata = $model->join('course','course.id_course = education_detail.id_course')
+        ->join('faculty','faculty.id_faculty = education_detail.id_faculty')
         ->select('course.name_course')
         ->select('faculty.name_faculty')
-        ->select('edu_condition.GPA'.'edu_condition.curriculum_edu','edu_condition.note_condi')
         ->select('education_detail.*')
-        ->orderBy('education_detail.id_edu_detail')->first();
+        ->orderBy('education_detail.id_edu_detail ')->first();
         return $this->respond($educationDetaildata);
+    }
+    public function getEduDetailById($id = null)
+    {
+        $model = new EduDetailModel();
+        $educationDetaildata = $model->where('id_edu_detail',$id)->first();
+        if($educationDetaildata){
+            return $this->respond($educationDetaildata);
+        }else{
+            return $this->failNotFound('Not Found');
+        }
+       
     }
 
     public function createEduDetail()
