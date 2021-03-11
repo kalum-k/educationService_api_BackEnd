@@ -17,7 +17,7 @@ class Education extends ResourceController
         $educationdata['education'] = $model->orderBy('id_education', 'DESC')->findAll();
         return $this->respond($educationdata);
     }
-    public function getEducation()
+    public function getEducation($id = null)
     {
         $model = new EducationModel();
         $educationdata = $model->join('round', 'round.id_round = education.id_round')
@@ -27,13 +27,25 @@ class Education extends ResourceController
             ->select('university.name_uni')
             ->select('schedule.detail_schedule')
             ->select('education.*')
-            ->orderBy('education.id_education')->first();
-        return $this->respond($educationdata);
+            ->orderBy('education.id_education')->findAll();
+            if($educationdata){
+                return $this->respond($educationdata);
+            }else{
+                return $this->failNotFound('Not found');
+            }
     }
     public function getEducatioById($id = null)
     {
         $model = new EducationModel();
-        $educationdata = $model->where('id_education',$id)->first();
+        $educationdata = $model->join('round', 'round.id_round = education.id_round')
+        ->join('university', 'university.id_university = education.id_university')
+        ->join('schedule', 'schedule.id_schedule = education.id_schedule')
+        ->select('round.name_round')
+        ->select('university.name_uni')
+        ->select('schedule.detail_schedule')
+        ->select('education.*')
+        ->orderBy('education.id_education')
+        ->where('id_education',$id)->first();
         if($educationdata){
             return $this->respond($educationdata);
         }else{
@@ -56,7 +68,6 @@ class Education extends ResourceController
             "general" => $this->request->getVar('general'),
             "doculment_edu" => $this->request->getVar('doculment_edu'),
             "note_edu" => $this->request->getVar('note_edu'),
-            "file_doculment" => $this->request->getVar('file_doculment'),
             "url_doculment" => $this->request->getVar('url_doculment'),
             "id_schedule" => $this->request->getVar('id_schedule')
         ];
@@ -65,14 +76,14 @@ class Education extends ResourceController
             'satatus' => 201,
             'error' => null,
             'meessage' => [
-                'success' => 'create successfully'
+                'success' => 'เพิ่มข้อมูลการศึกษาต่อสำเร็จ'
             ],
             'data' => $educationdata
         ];
         return $this->respond($response);
     }
 
-    public function updateEducation($id = null)
+    public function updateEducation($id)
     {
         $model = new EducationModel();
         $educationdata = [
@@ -86,16 +97,15 @@ class Education extends ResourceController
             "general" => $this->request->getVar('general'),
             "doculment_edu" => $this->request->getVar('doculment_edu'),
             "note_edu" => $this->request->getVar('note_edu'),
-            "file_doculment" => $this->request->getVar('file_doculment'),
             "url_doculment" => $this->request->getVar('url_doculment'),
             "id_schedule" => $this->request->getVar('id_schedule')
         ];
-        $model->update($id, $educationdata);
+        $model->update($id,$educationdata);
         $response = [
             'satatus' => 201,
             'error' => null,
             'meessage' => [
-                'success' => 'Educcation create successfully'
+                'success' => 'อัพเดทข้อมูลการศึกษาต่อสำเร็จ'
             ]
         ];
         return $this->respond($response);
@@ -111,7 +121,7 @@ class Education extends ResourceController
                 'satatus' => 200,
                 'error' => null,
                 'meessage' => [
-                    'success' => 'Education delete successfully'
+                    'success' => 'ลบข้อมูลการศึกษาต่อสำเร็จ'
                 ]
             ];
             return $this->respond($response);

@@ -27,7 +27,8 @@ class Student extends ResourceController
         ->select('title.name_title')
         ->select('curriculum.name_curriculum')
         ->select('student.*')
-        ->orderBy('student.id_stu')->first();
+        ->orderBy('student.id_stu')
+        ->where('id_stu',$studentID)->first();
         return $this->respond($studentdata);
     }
 

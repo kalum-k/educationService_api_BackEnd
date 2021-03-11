@@ -65,7 +65,7 @@ $routes->put('/course/(:num)', 'Course::updateCourse/$1');
 
 //Education
 $routes->post('/createEducation','Education::createEducation');
-$routes->put('/updateEducation/(:num)', 'Education::updateEducation/$1');
+$routes->put('/updateEducation/(:num)', 'Education::updateEducation');
 $routes->delete('/deleteEducation/(:num)','Education::deletedEducation/$1');
 $routes->get('/getEducation','Education::getEducation');
 $routes->get('/Education/(:num)','Education::getEducatioById/$1');
@@ -76,10 +76,12 @@ $routes->post('/createEduDetail','eduDetail::createEduDetail');
 $routes->put('/updateEduDetail/(:num)', 'Education::updateEduDetail/$1');
 $routes->get('/getEduDetail','eduDetail::getEduDetail');
 $routes->get('/eduDetail/(:num)','eduDetail::getEduDetailById/$1');
+$routes->get('/eduDetail/ByIdeducation/(:num)','eduDetail::getEduDetailByIdeducation/$1');
 
-//Condition
-$routes->post('/createEduCondition','EduCondition::createEduCondition');
-$routes->put('/updateEduCondition/(:num)', 'EduCondition::updateEduCondition/$1');
+//Round
+$routes->get('/Round', 'Round::index');
+$routes->get('/Round/(:num)', 'Round::getEducatioById/$1');
+
 
 //student
 $routes->get('/students', 'student::getAllStudent');

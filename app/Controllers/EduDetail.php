@@ -26,13 +26,35 @@ class EduDetail extends ResourceController
         ->select('course.name_course')
         ->select('faculty.name_faculty')
         ->select('education_detail.*')
-        ->orderBy('education_detail.id_edu_detail ')->first();
+        ->orderBy('education_detail.id_edu_detail ')->findAll();
         return $this->respond($educationDetaildata);
     }
     public function getEduDetailById($id = null)
     {
         $model = new EduDetailModel();
-        $educationDetaildata = $model->where('id_edu_detail',$id)->first();
+        $educationDetaildata = $model->join('course','course.id_course = education_detail.id_course')
+        ->join('faculty','faculty.id_faculty = education_detail.id_faculty')
+        ->select('course.name_course')
+        ->select('faculty.name_faculty')
+        ->select('education_detail.*')
+        ->orderBy('education_detail.id_edu_detail ')->findAll();
+        if($educationDetaildata){
+            return $this->respond($educationDetaildata);
+        }else{
+            return $this->failNotFound('Not Found');
+        }
+       
+    }
+    public function getEduDetailByIdeducation($id = null)
+    {
+        $model = new EduDetailModel();
+        $educationDetaildata = $model->join('course','course.id_course = education_detail.id_course')
+        ->join('faculty','faculty.id_faculty = education_detail.id_faculty')
+        ->select('course.name_course')
+        ->select('faculty.name_faculty')
+        ->select('education_detail.*')
+        ->orderBy('education_detail.id_edu_detail')
+        ->where('id_education',$id)->findAll();
         if($educationDetaildata){
             return $this->respond($educationDetaildata);
         }else{
@@ -47,9 +69,11 @@ class EduDetail extends ResourceController
         $model = new EduDetailModel();
         $educationDetaildata = [
             "number_of_edu" => $this->request->getVar('number_of_edu'),
-            "id_course" => $this->request->getVar('id_round'),
-            "id_faculty" => $this->request->getVar('id_university'),
-            "id_condition" => $this->request->getVar('id_condition'),
+            "GPA"=> $this->request->getVar('GPA'),
+            "curriculum_edu"=> $this->request->getVar('curriculum_edu'),
+            "note_condi"=> $this->request->getVar('note_condi'),
+            "id_course" => $this->request->getVar('id_course'),
+            "id_faculty" => $this->request->getVar('id_faculty'),
             "id_education" => $this->request->getVar('id_education')
         ];
         $model->insert($educationDetaildata);
@@ -57,8 +81,8 @@ class EduDetail extends ResourceController
             'satatus' => 201,
             'error' => null,
             'meessage' => [
-                'success' => 'EducationDetail create successfully'
-            ]
+                'success' => 'เพิ่มรายละเอียดการศึกษาต่อสำเร็จ'
+            ], 'data' => $educationDetaildata
         ];
         return $this->respond($response);
     }
@@ -68,10 +92,13 @@ class EduDetail extends ResourceController
         $model = new EduDetailModel();
         $educationDetaildata = [
             "number_of_edu" => $this->request->getVar('number_of_edu'),
-            "id_course" => $this->request->getVar('id_round'),
-            "id_faculty" => $this->request->getVar('id_university'),
-            "id_condition" => $this->request->getVar('id_condition'),
+            "GPA"=> $this->request->getVar('GPA'),
+            "curriculum_edu"=> $this->request->getVar('curriculum_edu'),
+            "note_condi"=> $this->request->getVar('note_condi'),
+            "id_course" => $this->request->getVar('id_course'),
+            "id_faculty" => $this->request->getVar('id_faculty'),
             "id_education" => $this->request->getVar('id_education')
+        
         ];
 
         $model->update($id, $educationDetaildata);
