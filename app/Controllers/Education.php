@@ -17,17 +17,15 @@ class Education extends ResourceController
         $educationdata['education'] = $model->orderBy('id_education', 'DESC')->findAll();
         return $this->respond($educationdata);
     }
-    public function getEducation($id = null)
+    public function getEducation()
     {
         $model = new EducationModel();
         $educationdata = $model->join('round', 'round.id_round = education.id_round')
-            ->join('university', 'university.id_university = education.id_university')
-            ->join('schedule', 'schedule.id_schedule = education.id_schedule')
-            ->select('round.name_round')
-            ->select('university.name_uni')
-            ->select('schedule.detail_schedule')
-            ->select('education.*')
-            ->orderBy('education.id_education')->findAll();
+        ->join('university', 'university.id_university = education.id_university')
+        ->select('round.name_round')
+        ->select('university.name_uni')
+        ->select('education.*')
+        ->orderBy('education.id_education')->findAll();
             if($educationdata){
                 return $this->respond($educationdata);
             }else{
@@ -39,10 +37,8 @@ class Education extends ResourceController
         $model = new EducationModel();
         $educationdata = $model->join('round', 'round.id_round = education.id_round')
         ->join('university', 'university.id_university = education.id_university')
-        ->join('schedule', 'schedule.id_schedule = education.id_schedule')
         ->select('round.name_round')
         ->select('university.name_uni')
-        ->select('schedule.detail_schedule')
         ->select('education.*')
         ->orderBy('education.id_education')
         ->where('id_education',$id)->first();

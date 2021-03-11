@@ -37,7 +37,8 @@ class EduDetail extends ResourceController
         ->select('course.name_course')
         ->select('faculty.name_faculty')
         ->select('education_detail.*')
-        ->orderBy('education_detail.id_edu_detail ')->findAll();
+        ->orderBy('education_detail.id_edu_detail' )
+        ->where('id_edu_Detail',$id)->findAll();
         if($educationDetaildata){
             return $this->respond($educationDetaildata);
         }else{
